@@ -21,7 +21,24 @@ public class SessionUtils {
 	}
 	
 	public static Long getUserId() {
-		return Long.parseLong(getSession().getAttribute(USER_ID).toString());
+		return getUserId(getSession());
+	}
+	
+	public static Long getUserId(HttpSession session) {
+		try {
+			Object obj = get(session, USER_ID);
+			if(obj != null) {
+				return Long.valueOf(obj.toString());
+			}
+			return null;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
+	}
+	
+	public static void setUserId(HttpSession session,Long userId) {
+		session.setAttribute(USER_ID, userId);
 	}
 	
 	public static void setUserId(Long userId) {
@@ -32,18 +49,30 @@ public class SessionUtils {
 		getSession().setAttribute(key, value);
 	}
 	
+	public static void set(HttpSession session,String key, Object value) {
+		session.setAttribute(key, value);
+	}
+	
+	
 	@SuppressWarnings("unchecked")
-	public static <T> T get(String key) {
+	public static <T> T get(HttpSession session,String key) {
 		try {
-			return (T)getSession().getAttribute(key);
+			return (T)session.getAttribute(key);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 		return null;
 	}
 	
+	public static <T> T get(String key) {
+		return get(getSession(), key);
+	}
+	
 	public static void delete(String key) {
-		HttpSession session = getSession();
+		delete(getSession(), key);
+	}
+	
+	public static void delete(HttpSession session,String key) {
 		Enumeration<String> keys = session.getAttributeNames();
 		while(keys.hasMoreElements()) {
 			String k = keys.nextElement();
