@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,32 +21,74 @@ import okio.Buffer;
 
 public class HttpUtils {
 	private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
-	public static boolean isDebug = false;
+	private boolean isDebug = false;
 
-	private static CookieStore cookieStore = new FileCookieStore();
-	public static OkHttpClient okHttpClient = new OkHttpClient.Builder()//
-			.cookieJar(new CookieJarImpl(cookieStore))//
-			.addInterceptor(new HeaderInterceptor())//
-			.build();
+	private CookieStore cookieStore = new FileCookieStore();
+	private static OkHttpClient okHttpClient;
 
-	public static void clearCookie() {
+	public HttpUtils() {
+		super();
+		HttpUtils.okHttpClient = getClient();
+	}
+
+	public HttpUtils(boolean isDebug) {
+		super();
+		this.isDebug = isDebug;
+		HttpUtils.okHttpClient = getClient();
+	}
+	
+	public HttpUtils(OkHttpClient okHttpClient) {
+		super();
+		HttpUtils.okHttpClient = okHttpClient;
+	}
+	
+	public HttpUtils(boolean isDebug, OkHttpClient okHttpClient) {
+		super();
+		this.isDebug = isDebug;
+		HttpUtils.okHttpClient = okHttpClient;
+	}
+	
+	private OkHttpClient getClient() {
+		if(okHttpClient ==null) {
+			return new OkHttpClient.Builder()//
+					.cookieJar(new CookieJarImpl(cookieStore))//
+					.addInterceptor(new HeaderInterceptor())//
+					.build();
+		}
+		return HttpUtils.okHttpClient;
+	}
+
+	public boolean isDebug() {
+		return isDebug;
+	}
+
+	
+	public CookieStore getCookieStore() {
+		return cookieStore;
+	}
+
+	public OkHttpClient getOkHttpClient() {
+		return okHttpClient;
+	}
+
+	public void setOkHttpClient(OkHttpClient okHttpClient) {
+		HttpUtils.okHttpClient = okHttpClient;
+	}
+
+	public void clearCookie() {
 		cookieStore.removeAll();
 	}
 
-	public static boolean isError(String result) {
-		return StringUtils.contains(result, "\"state\":\"fail\"");
-	}
-
-	public static String get(String url) {
+	public String get(String url) {
 		Request request = new Request.Builder().url(url).build();
 		return execute(request);
 	}
 
-	public static String ajaxGet(String url) {
+	public String ajaxGet(String url) {
 		return ajaxGet(url, null);
 	}
 
-	public static String ajaxGet(String url, Headers headers) {
+	public  String ajaxGet(String url, Headers headers) {
 		Request.Builder b = new Request.Builder();
 		if (headers != null && headers.size() > 0) {
 			b.headers(headers);
@@ -57,18 +98,18 @@ public class HttpUtils {
 		return execute(request);
 	}
 
-	public static String post(String url, RequestBody body) {
+	public  String post(String url, RequestBody body) {
 		Request request = new Request.Builder().post(body)//
 				.url(url)//
 				.build();
 		return execute(request);
 	}
 
-	public static String ajaxPost(String url, RequestBody body) {
+	public  String ajaxPost(String url, RequestBody body) {
 		return ajaxPost(url, body, null);
 	}
 
-	public static String ajaxPost(String url, RequestBody body, Headers headers) {
+	public  String ajaxPost(String url, RequestBody body, Headers headers) {
 		Request.Builder b = new Request.Builder();
 		if (headers != null && headers.size() > 0) {
 			b.headers(headers);
@@ -78,7 +119,7 @@ public class HttpUtils {
 		return execute(request);
 	}
 
-	public static String execute(Request request) {
+	public  String execute(Request request) {
 		try (Response response = okHttpClient.newCall(request).execute()) {
 			debug(response);
 			if (response.code() == 200) {
@@ -94,7 +135,7 @@ public class HttpUtils {
 	}
 
 	// 打印日志
-	private static void debug(Response response) {
+	protected  void debug(Response response) {
 		if (!isDebug) {
 			return;
 		}
