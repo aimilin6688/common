@@ -21,41 +21,53 @@ import okio.Buffer;
 
 public class HttpUtils {
 	private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
+	
+	private static HttpUtils httpUtils;
 	private boolean isDebug = false;
-
-	private CookieStore cookieStore = new FileCookieStore();
-	private static OkHttpClient okHttpClient;
+	private CookieStore cookieStore;
+	private OkHttpClient okHttpClient;
+	
+	/**
+	 * 如果需要单例调用该方法
+	 * @return
+	 */
+	public static HttpUtils getInstance() {
+		if(httpUtils == null) {
+			httpUtils = new HttpUtils();
+		}
+		return httpUtils;
+	}
 
 	public HttpUtils() {
-		super();
-		HttpUtils.okHttpClient = getClient();
+		this.okHttpClient = getClient();
 	}
 
 	public HttpUtils(boolean isDebug) {
 		super();
 		this.isDebug = isDebug;
-		HttpUtils.okHttpClient = getClient();
+		this.okHttpClient = getClient();
 	}
 	
 	public HttpUtils(OkHttpClient okHttpClient) {
 		super();
-		HttpUtils.okHttpClient = okHttpClient;
+		this.okHttpClient = okHttpClient;
 	}
 	
 	public HttpUtils(boolean isDebug, OkHttpClient okHttpClient) {
 		super();
 		this.isDebug = isDebug;
-		HttpUtils.okHttpClient = okHttpClient;
+		this.okHttpClient = okHttpClient;
+	}
+
+	protected OkHttpClient getClient() {
+		return new OkHttpClient.Builder()//
+		.cookieJar(new CookieJarImpl(new FileCookieStore()))//
+		.addInterceptor(new HeaderInterceptor())//
+		.build();
 	}
 	
-	private OkHttpClient getClient() {
-		if(okHttpClient ==null) {
-			return new OkHttpClient.Builder()//
-					.cookieJar(new CookieJarImpl(cookieStore))//
-					.addInterceptor(new HeaderInterceptor())//
-					.build();
-		}
-		return HttpUtils.okHttpClient;
+	public void setDebug(boolean isDebug) {
+		this.isDebug = isDebug;
 	}
 
 	public boolean isDebug() {
@@ -72,7 +84,7 @@ public class HttpUtils {
 	}
 
 	public void setOkHttpClient(OkHttpClient okHttpClient) {
-		HttpUtils.okHttpClient = okHttpClient;
+		this.okHttpClient = okHttpClient;
 	}
 
 	public void clearCookie() {
@@ -118,12 +130,14 @@ public class HttpUtils {
 		Request request = b.post(body).url(url).build();//
 		return execute(request);
 	}
-
-	public  String execute(Request request) {
-		try (Response response = okHttpClient.newCall(request).execute()) {
+	
+	public String execute(OkHttpClient httpClient, Request request) {
+		try (Response response = httpClient.newCall(request).execute()) {
 			debug(response);
 			if (response.code() == 200) {
-				return response.body().string();
+				String result =  response.body().string();
+				log.debug("请求：{}，结果:{}", response.request().url(), result);
+				return result;
 			} else {
 				log.warn("请求：{}，结果：{}", request, response);
 				return response.body().string();
@@ -132,6 +146,10 @@ public class HttpUtils {
 			log.error(e.getMessage(), e);
 			return e.getMessage();
 		}
+	}
+	
+	public  String execute(Request request) {
+		return execute(this.okHttpClient, request);
 	}
 
 	// 打印日志

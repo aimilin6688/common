@@ -45,6 +45,14 @@ public class SessionUtils {
 		set(USER_ID, userId);
 	}
 	
+	public static void removeUserId() {
+		delete(getSession(), USER_ID);
+	}
+	
+	public static void removeUserId(HttpSession session) {
+		delete(session, USER_ID);
+	}
+	
 	public static void set(String key, Object value) {
 		getSession().setAttribute(key, value);
 	}

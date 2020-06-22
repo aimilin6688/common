@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.aimilin</groupId>
 	<artifactId>common</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<description>核心工具类</description>
 	<packaging>jar</packaging>
 	<properties>
@@ -32,13 +32,13 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.70</version>
+			<version>1.2.71</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>5.2.6.RELEASE</version>
+			<version>5.2.7.RELEASE</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
