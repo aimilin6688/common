@@ -24,6 +24,10 @@ public class SessionUtils {
 		return getUserId(getSession());
 	}
 	
+	public static String getId() {
+		return getSession().getId();
+	}
+	
 	public static Long getUserId(HttpSession session) {
 		try {
 			Object obj = get(session, USER_ID);
