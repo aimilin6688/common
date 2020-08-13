@@ -97,13 +97,23 @@ public class HttpUtils {
 	}
 
 	public String ajaxGet(String url) {
-		return ajaxGet(url, null);
+		return ajaxGet(url, null, true);
+	}
+	
+	public String ajaxGet(String url, Headers headers) {
+		return ajaxGet(url, headers, true);
 	}
 
-	public  String ajaxGet(String url, Headers headers) {
+	public  String ajaxGet(String url, Headers headers, boolean isNew) {
 		Request.Builder b = new Request.Builder();
 		if (headers != null && headers.size() > 0) {
-			b.headers(headers);
+			if(isNew) {
+				b.headers(headers);
+			}else {
+				for (String name : headers.names()) {
+					b.header(name, headers.get(name));
+				}
+			}
 		}
 		b.header("X-Requested-With", "XMLHttpRequest");
 		Request request = b.url(url).build();
@@ -118,13 +128,32 @@ public class HttpUtils {
 	}
 
 	public  String ajaxPost(String url, RequestBody body) {
-		return ajaxPost(url, body, null);
+		return ajaxPost(url, body, null, true);
+	}
+	
+	public  String ajaxPost(String url, RequestBody body,Headers headers) {
+		return ajaxPost(url, body, headers, true);
 	}
 
-	public  String ajaxPost(String url, RequestBody body, Headers headers) {
+	/**
+	 * 通过ajax提交请求
+	 * @param url 请求地址
+	 * @param body 发送请求内容
+	 * @param headers 请求头，可以是null
+	 * @param isNew true 覆盖原有请求头，false 添加请求头，已存在的会覆盖
+	 * @return
+	 */
+	public  String ajaxPost(String url, RequestBody body, Headers headers, boolean isNew) {
 		Request.Builder b = new Request.Builder();
 		if (headers != null && headers.size() > 0) {
-			b.headers(headers);
+			if(isNew) {
+				b.headers(headers);
+			}else {
+				for (String name : headers.names()) {
+					b.header(name, headers.get(name));
+					System.out.println("--------set head-------------------"+name+headers.get(name));
+				}
+			}
 		}
 		b.header("X-Requested-With", "XMLHttpRequest");
 		Request request = b.post(body).url(url).build();//
