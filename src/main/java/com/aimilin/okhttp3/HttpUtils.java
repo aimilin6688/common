@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,6 +96,21 @@ public class HttpUtils {
 		Request request = new Request.Builder().url(url).build();
 		return execute(request);
 	}
+	
+	public String get(String url,Headers headers, boolean isNew) {
+		Request.Builder b = new Request.Builder();
+		if (headers != null && headers.size() > 0) {
+			if(isNew) {
+				b.headers(headers);
+			}else {
+				for (String name : headers.names()) {
+					b.header(name, headers.get(name));
+				}
+			}
+		}
+		Request request = b.url(url).build();
+		return execute(request);
+	}
 
 	public String ajaxGet(String url) {
 		return ajaxGet(url, null, true);
@@ -151,7 +167,9 @@ public class HttpUtils {
 			}else {
 				for (String name : headers.names()) {
 					b.header(name, headers.get(name));
-					System.out.println("--------set head-------------------"+name+headers.get(name));
+					if(this.isDebug) {
+						System.out.println(String.format("Set Header, %s: %s", name, headers.get(name)));
+					}
 				}
 			}
 		}
@@ -165,7 +183,7 @@ public class HttpUtils {
 			debug(response);
 			if (response.code() == 200) {
 				String result =  response.body().string();
-				log.debug("请求：{}，结果:{}", response.request().url(), result);
+				log.debug("请求：{}，结果:{}", response.request().url(), StringEscapeUtils.unescapeJava(result));
 				return result;
 			} else {
 				log.warn("请求：{}，结果：{}", request, response);

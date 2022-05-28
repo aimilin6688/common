@@ -68,6 +68,7 @@ public class FileCookieStore extends MemoryCookieStore {
 
 		try {
 			Files.write(file.toPath(), j1.toJSONString().getBytes());
+			log.debug("cookie ，写入文件：{}", file.toPath());
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 		}
