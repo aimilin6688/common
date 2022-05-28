@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.aimilin</groupId>
 	<artifactId>common</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<description>核心工具类</description>
 	<packaging>jar</packaging>
 	<properties>
@@ -56,6 +56,12 @@
 			<version>4.0.1</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -67,4 +73,10 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>
+	</distributionManagement>
 </project>

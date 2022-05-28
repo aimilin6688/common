@@ -1,6 +1,7 @@
 package com.aimilin.okhttp3;
 
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 
 class URLParserTest {
 
