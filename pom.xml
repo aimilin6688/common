@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.aimilin</groupId>
 	<artifactId>common</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<description>核心工具类</description>
 	<packaging>jar</packaging>
 	<properties>

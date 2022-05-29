@@ -39,6 +39,14 @@ public class HttpUtils {
 		return httpUtils;
 	}
 
+	/**
+	 * 新建一个空白请求实例
+	 * @return HttpUtils
+	 */
+	public static HttpUtils newInstance(){
+		return new HttpUtils(new OkHttpClient.Builder().build());
+	}
+
 	public HttpUtils() {
 		this.okHttpClient = getClient();
 	}
@@ -48,7 +56,8 @@ public class HttpUtils {
 		this.isDebug = isDebug;
 		this.okHttpClient = getClient();
 	}
-	
+
+
 	public HttpUtils(OkHttpClient okHttpClient) {
 		super();
 		this.okHttpClient = okHttpClient;
