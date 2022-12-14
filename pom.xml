@@ -15,6 +15,16 @@
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 	</properties>
 
+	<name>${project.groupId}:${project.artifactId}</name>
+	<url>https://github.com/aimilin6688/common</url>
+
+	<licenses>
+		<license>
+		  <name>The Apache License, Version 2.0</name>
+		  <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	  </licenses>
+
 	<developers>
 		<developer>
 			<name>aimilin</name>
@@ -26,6 +36,12 @@
 			<timezone>+8</timezone>
 		</developer>
 	</developers>
+	<scm>
+		<connection>scm:git:git://github.com/aimilin6688/common.git</connection>
+		<developerConnection>scm:git:ssh://github.com:aimilin6688/common.git</developerConnection>
+		<url>http://github.com/aimilin6688/common/</url>
+	  </scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
@@ -58,7 +74,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>6.0.0</version>
+			<version>5.2.7.RELEASE</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -113,6 +129,7 @@
 					<source>${java.version}</source>
 					<additionalJOption>-Xdoclint:none</additionalJOption>
 					<failOnError>false</failOnError>
+					<javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
 				</configuration>
 			</plugin>
 
