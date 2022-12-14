@@ -7,9 +7,6 @@
 	<version>1.0.5</version>
 	<description>核心工具类</description>
 	<packaging>jar</packaging>
-	<name>common</name>
-	<url>https://github.com/aimilin6688/common</url>
-
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -18,6 +15,16 @@
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 		<jdk-version>1.8</jdk-version>
 	</properties>
+
+	<name>${project.groupId}:${project.artifactId}</name>
+	<url>https://github.com/aimilin6688/common</url>
+
+	<licenses>
+		<license>
+		  <name>The Apache License, Version 2.0</name>
+		  <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	  </licenses>
 
 	<developers>
 		<developer>
@@ -30,6 +37,12 @@
 			<timezone>+8</timezone>
 		</developer>
 	</developers>
+	<scm>
+		<connection>scm:git:git://github.com/aimilin6688/common.git</connection>
+		<developerConnection>scm:git:ssh://github.com:aimilin6688/common.git</developerConnection>
+		<url>http://github.com/aimilin6688/common/</url>
+	  </scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
@@ -50,7 +63,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.71</version>
+			<version>1.2.83</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -62,7 +75,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>5.2.6.RELEASE</version>
+			<version>5.2.7.RELEASE</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -80,6 +93,26 @@
 	</dependencies>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<useReleaseProfile>false</useReleaseProfile>
+					<releaseProfiles>release</releaseProfiles>
+					<goals>deploy</goals>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
@@ -117,6 +150,7 @@
 					<source>${java.version}</source>
 					<additionalJOption>-Xdoclint:none</additionalJOption>
 					<failOnError>false</failOnError>
+					<javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
 				</configuration>
 			</plugin>
 
@@ -140,25 +174,11 @@
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 	</distributionManagement>
-
-	<scm>
-		<connection>scm:git:https://github.com/aimilin6688/common.git</connection>
-		<developerConnection>scm:git:https://github.com/aimilin6688/common.git</developerConnection>
-		<url>https://github.com/aimilin6688/common</url>
-		<tag>1.0.5</tag>
-	</scm>
-
-	<licenses>
-		<license>
-			<name>The MIT License (MIT)</name>
-			<url>https://raw.githubusercontent.com/aimilin6688/common/master/LICENSE</url>
-		</license>
-	</licenses>
 </project>
