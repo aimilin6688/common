@@ -150,7 +150,6 @@
 					<source>${java.version}</source>
 					<additionalJOption>-Xdoclint:none</additionalJOption>
 					<failOnError>false</failOnError>
-					<javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
 				</configuration>
 			</plugin>
 
